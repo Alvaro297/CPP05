@@ -11,7 +11,7 @@ private:
 	const int			gradeToExecute;
 	const int			gradeToSign;
 public:
-	Form::Form(std::string newName, const int newGradeToExecute, const int newGradeToSign, bool isSigned = false);
+	Form::Form(std::string newName, const int newGradeToExecute, const int newGradeToSign);
 	Form(const Form& other);
 	Form& operator=(const Form& other);
 	const std::string getName(void) const;
