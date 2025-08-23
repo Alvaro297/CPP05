@@ -1,7 +1,9 @@
 #ifndef FORM_HPP
 # define FORM_HPP
 
-#include "Bureaucrat.hpp"
+#include <iostream>
+
+class Bureaucrat;
 
 class Form
 {
@@ -11,13 +13,13 @@ private:
 	const int			gradeToExecute;
 	const int			gradeToSign;
 public:
-	Form::Form(std::string newName, const int newGradeToExecute, const int newGradeToSign);
+	Form(std::string newName, const int newGradeToExecute, const int newGradeToSign);
 	Form(const Form& other);
 	Form& operator=(const Form& other);
-	const std::string getName(void) const;
+	const std::string& getName(void) const;
 	bool getIsSigned(void) const;
-	const int getGradeToExecute(void) const;
-	const int getGradeToSign(void) const;
+	int getGradeToExecute(void) const;
+	int getGradeToSign(void) const;
 	void beSigned(const Bureaucrat &b);
 	~Form();
 

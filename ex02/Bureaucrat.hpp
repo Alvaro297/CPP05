@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include "AForm.hpp"
+class AForm;
 
 class Bureaucrat
 {
@@ -16,7 +16,7 @@ public:
 	Bureaucrat& operator=(const Bureaucrat& other);
 	~Bureaucrat();
 	int getGrade(void) const;
-	const std::string getName(void) const;
+	const std::string& getName(void) const;
 	void incrementGrade(void);
 	void decrementGrade(void);
 	void executeForm(AForm const & form) const;

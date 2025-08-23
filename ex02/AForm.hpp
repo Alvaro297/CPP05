@@ -1,7 +1,11 @@
 #ifndef AFORM_HPP
 # define AFORM_HPP
 
+#include <string>
+#include <ostream>
 #include "Bureaucrat.hpp"
+
+class Bureaucrat;
 
 class AForm
 {
@@ -14,10 +18,10 @@ public:
 	AForm(std::string newName, const int newGradeToExecute, const int newGradeToSign);
 	AForm(const AForm& other);
 	AForm& operator=(const AForm& other);
-	const std::string getName(void) const;
+	const std::string& getName(void) const;
 	bool getIsSigned(void) const;
-	const int getGradeToExecute(void) const;
-	const int getGradeToSign(void) const;
+	int getGradeToExecute(void) const;
+	int getGradeToSign(void) const;
 	void beSigned(const Bureaucrat &b);
 	virtual void execute(Bureaucrat const &b) const = 0;
 	virtual ~AForm();
@@ -32,6 +36,12 @@ public:
 	{
 		public:
 			const char* what() const throw() { return "Grade too Low"; };
+	};
+
+	class FormNotSignedException : public std::exception
+	{
+		public:
+			const char* what() const throw() { return "Form is not signed"; };
 	};
 };
 

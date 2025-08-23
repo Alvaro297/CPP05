@@ -1,7 +1,8 @@
 #include "AForm.hpp"
 #include "RobotomyRequestForm.hpp"
+#include <cstdlib>
 
-RobotomyRequestForm::RobotomyRequestForm(std::string const newTarget) : target(newTarget), AForm("RobotomyRequestForm", 45, 72) { std::cout << "RobotomyRequestForm created" << std::endl; }
+RobotomyRequestForm::RobotomyRequestForm(std::string const newTarget) : AForm("RobotomyRequestForm", 45, 72), target(newTarget) { std::cout << "RobotomyRequestForm created" << std::endl; }
 
 RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &other) : AForm(other) { std::cout << "RobotomyRequestForm created" << std::endl; }
 
@@ -9,29 +10,29 @@ RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &o
 {
 	if (this != &other)
 	{
-		this->target = other.target;
-		this->isSigned = other.isSigned;
+		AForm::operator=(other);
+		this->target = other.getTarget();
 	}
-	std::cout << "RobotomyRequestForm created" << std::endl;
+	std::cout << "RobotomyRequestForm assigned" << std::endl;
 	return (*this);
 }
 
 RobotomyRequestForm::~RobotomyRequestForm() { std::cout << "RobotomyRequestForm destroyed" << std::endl; }
 
-void RobotomyRequestForm::getTarget(void) { return this->target; }
+const std::string& RobotomyRequestForm::getTarget(void) const { return this->target; }
 
-void RobotomyRequestForm::execute(Bureaucrat const &b)
+void RobotomyRequestForm::execute(Bureaucrat const &b) const
 {
-	if (this->isSigned && (b.getGrade() > this->gradeToExecute))
+	if (this->getIsSigned() && (b.getGrade() < this->getGradeToExecute()))
 	{
 		std::cout << "BZZZZZZZZ" << std::endl;
-		if(rand() % 2 == 0)
+		if (std::rand() % 2 == 0)
 			std::cout << "Robotomized success " << this->target << std::endl;
 		else
 			std::cout << "Failed robotomized " << this->target << std::endl;
 	}
-	else if (b.getGrade() < this->gradeToExecute)
+	else if (b.getGrade() > this->getGradeToExecute())
 		throw GradeTooLowException();
-	else
-		std::cout << "Error file not signed" << std::endl;
+	else if (!this->getIsSigned())
+		throw FormNotSignedException();
 }

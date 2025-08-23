@@ -47,8 +47,8 @@ void Bureaucrat::incrementGrade(void)
 void Bureaucrat::decrementGrade(void)
 {
 	this->grade += 1;
-	if (this->grade > 1)
-		throw GradeTooLowException();
+	if (this->grade > 150)
+		throw GradeTooHighException();
 }
 
 std::ostream& operator<<(std::ostream& os, const Bureaucrat& b)

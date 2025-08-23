@@ -1,43 +1,42 @@
 #include "ShrubberyCreationForm.hpp"
+#include <fstream>
 
-ShrubberyCreationForm::ShrubberyCreationForm(std::string const newTarget) : target(newTarget) , AForm("ShrubberyCreationForm", 137, 145) { std::cout << "ShrubberyCreationForm created" << std::endl; }
+ShrubberyCreationForm::ShrubberyCreationForm(std::string const newTarget) : AForm("ShrubberyCreationForm", 137, 145), target(newTarget) { std::cout << "ShrubberyCreationForm created" << std::endl; }
 
 ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm& other) : AForm(other) { std::cout << "ShrubberyCreationForm created" << std::endl; }
 
 ShrubberyCreationForm& ShrubberyCreationForm::operator=(const ShrubberyCreationForm& other)
 {
-	if(this != &other)
+	if (this != &other)
 	{
-		this->target = other.target;
-		this->isSigned = other.isSigned;
+		AForm::operator=(other);
+		this->target = other.getTarget();
 	}
-	std::cout << "ShrubberyCreationForm created" << std::endl;
-	return (*this);
+	std::cout << "ShrubberyCreationForm assigned" << std::endl;
+	return *this;
 }
 
 ShrubberyCreationForm::~ShrubberyCreationForm() { std::cout << "ShrubberyCreationForm destroyed" << std::endl; }
 
-void ShrubberyCreationForm::getTarget(void) { return this->target; }
+const std::string& ShrubberyCreationForm::getTarget(void) const { return this->target; }
 
-void ShrubberyCreationForm::execute(Bureaucrat const &b);
+void ShrubberyCreationForm::execute(Bureaucrat const &b) const
 {
-	std::string filename;
-
-	filename = this->target + "_shrubbery";
-	if (this->isSigned && (b.getGrade() > this->gradeToExecute))
+	std::string filename = this->target + "_shrubbery";
+	if (this->getIsSigned() && (b.getGrade() < this->getGradeToExecute()))
 	{
-		std::ofstream file(filename);
+		std::ofstream file(filename.c_str());
 		if (file.is_open())
 		{
-			file << "       _-_-\\n";
-			file << "    /~~   ~~\\\\\\n";
-			file << " /~~         ~~\\\\\\n";
-			file << "{               }\\n";
-			file << " \\\\  _-     -_  /\\n";
-			file << "   ~  \\\\ //  ~\\n";
-			file << "_- -   | | _- _\\n";
-			file << "  _ -  | |   -_\\n";
-			file << "      // \\\\ \\n";
+			file << "       _-_-\n";
+			file << "    /~~   ~~\\\n";
+			file << " /~~         ~~\\\n";
+			file << "{               }\n";
+			file << " \\  _-     -_  /\n";
+			file << "   ~  \\ //  ~\n";
+			file << "_- -   | | _- _\n";
+			file << "  _ -  | |   -_\n";
+			file << "      // \\\\ \n";
 			file.close();
 			std::cout << "Shrubbery created in " << filename << std::endl;
 		}
@@ -46,8 +45,8 @@ void ShrubberyCreationForm::execute(Bureaucrat const &b);
 			std::cerr << "Error: Could not open file " << filename << std::endl;
 		}
 	}
-	else if (b.getGrade() < this->gradeToExecute)
+	else if (b.getGrade() > this->getGradeToExecute())
 		throw GradeTooLowException();
-	else
-		std::cout << "Error file not signed" << std::endl;
+	else if (!this->getIsSigned())
+		throw FormNotSignedException();
 }

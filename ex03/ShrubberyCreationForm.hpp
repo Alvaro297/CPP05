@@ -3,7 +3,7 @@
 
 #include "AForm.hpp"
 
-class ShrubberyCreationForm : AForm
+class ShrubberyCreationForm : public AForm
 {
 private:
 	std::string target;
@@ -12,8 +12,8 @@ public:
 	ShrubberyCreationForm(const ShrubberyCreationForm& other);
 	ShrubberyCreationForm& operator=(const ShrubberyCreationForm& other);
 	~ShrubberyCreationForm();
-	std::string getTarget(void) const;
-	void beExecuted(const Bureaucrat &b);
+	const std::string& getTarget(void) const;
+	void execute(Bureaucrat const &b) const;
 };
 
 

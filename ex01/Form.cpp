@@ -1,6 +1,8 @@
+#include <iostream>
 #include "Form.hpp"
+#include "Bureaucrat.hpp"
 
-Form::Form(std::string newName, const int newGradeToExecute, const int newGradeToSign) : name(newName), gradeToExecute(newGradeToExecute), gradeToSign(newGradeToSign)
+Form::Form(std::string newName, const int newGradeToExecute, const int newGradeToSign) : name(newName), isSigned(false), gradeToExecute(newGradeToExecute), gradeToSign(newGradeToSign)
 {
 	this->isSigned = false;
 	if (newGradeToSign < 1 || newGradeToExecute < 1)
@@ -10,7 +12,7 @@ Form::Form(std::string newName, const int newGradeToExecute, const int newGradeT
 	std::cout << "Form created" << std::endl;
 }
 
-Form::Form(const Form& other) : name(other.name), gradeToExecute(other.gradeToExecute), gradeToSign(other.gradeToSign), isSigned(other.isSigned)
+Form::Form(const Form& other) : name(other.name), isSigned(other.isSigned), gradeToExecute(other.gradeToExecute), gradeToSign(other.gradeToSign)
 {
 	if (other.gradeToSign < 1 || other.gradeToExecute < 1)
 		throw GradeTooHighException();
@@ -22,15 +24,15 @@ Form::Form(const Form& other) : name(other.name), gradeToExecute(other.gradeToEx
 Form::~Form(void) { std::cout << "Form destroyed" << std::endl; }
 
 //** Getters **//
-const std::string Form::getName(void) const { return this->name; }
+const std::string& Form::getName(void) const { return this->name; }
 bool Form::getIsSigned(void) const { return this->isSigned; }
-const int Form::getGradeToExecute(void) const { return this->gradeToExecute; }
-const int Form::getGradeToSign(void) const { return this->gradeToSign; }
+int Form::getGradeToExecute(void) const { return this->gradeToExecute; }
+int Form::getGradeToSign(void) const { return this->gradeToSign; }
 
 
 void Form::beSigned(const Bureaucrat& b)
 {
-	if (this->getGradeToSign() < b.getGrade())
+	if (b.getGrade() > this->getGradeToSign())
 		throw GradeTooLowException();
 	this->isSigned = true;
 }

@@ -1,4 +1,5 @@
 #include "Bureaucrat.hpp"
+#include "AForm.hpp"
 
 Bureaucrat::Bureaucrat(const Bureaucrat& other) : name(other.name), grade(other.grade)
 {
@@ -34,7 +35,7 @@ Bureaucrat& Bureaucrat::operator=(const Bureaucrat& other)
 
 Bureaucrat::~Bureaucrat() {std::cout << "Bureaucrat destroyed" << std::endl;}
 
-const std::string Bureaucrat::getName(void) const { return this->name; }
+const std::string& Bureaucrat::getName(void) const { return this->name; }
 int Bureaucrat::getGrade(void) const { return this->grade; }
 
 void Bureaucrat::incrementGrade(void)
@@ -47,18 +48,18 @@ void Bureaucrat::incrementGrade(void)
 void Bureaucrat::decrementGrade(void)
 {
 	this->grade += 1;
-	if (this->grade > 1)
+	if (this->grade > 150)
 		throw GradeTooLowException();
 }
 
 void Bureaucrat::executeForm(AForm const & form) const
 {
-	if (form.getIsSigned() && (form.getGradeToExecute() <= this->grade))
+	try {
+		form.execute(*this);
 		std::cout << this->name << " executed " << form.getName() << std::endl;
-	else if (form.getGradeToExecute() > this->grade)
-		throw GradeTooLowException()
-	else
-		std::cout << "Error file not signed" << std::endl;
+	} catch (const std::exception &e) {
+		std::cout << this->name << " couldn't execute " << form.getName() << " because " << e.what() << std::endl;
+	}
 }
 
 std::ostream& operator<<(std::ostream& os, const Bureaucrat& b)
